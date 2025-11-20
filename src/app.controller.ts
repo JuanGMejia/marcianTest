@@ -1,12 +1,26 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+// infrastructure.controller.ts
+import { Controller, Get, Post, Body } from '@nestjs/common';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+import { InfrastructureService } from './app.service';
+import { CreateOrderDto } from './events.gateway';
+
+@Controller('mars-api')
+export class InfrastructureController {
+  constructor(private readonly infraService: InfrastructureService) { }
+
+  @Get('inventory')
+  getInventory() {
+    return this.infraService.getInventory();
+  }
+
+  @Get('history')
+  getHistory() {
+    return this.infraService.getHistory();
+  }
+
+  @Post('order')
+  createOrder(@Body() createOrderDto: CreateOrderDto) {
+    return this.infraService.processOrder(createOrderDto);
   }
 }
